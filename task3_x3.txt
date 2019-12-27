@@ -1,0 +1,32 @@
+#计算每个同学的消费次数、消费总金额 
+money_sum = data_mer_1['Money'].groupby(data_mer_1['CardNo']).sum()
+money_count = data_mer_1['Money'].groupby(data_mer_1['CardNo']).count()
+
+#提取每个同学消费次数、消费总金额的数据
+dataframe = pd.DataFrame({ 'money_sum':money_sum, 'money_count':money_count})
+dataframe.to_csv('task3_X2.csv')
+dx = pd.read_csv('task3_X2.csv')
+#dx
+
+# 均值-方差标准化
+from sklearn.preprocessing import StandardScaler   #导入均值-方差规范化模块
+X=dx.loc[:,['money_count','money_sum']]
+scaler = StandardScaler()
+scaler.fit(X) 
+data_prp1=scaler.transform(X)  
+# 0-1标准化
+from sklearn.preprocessing import MinMaxScaler
+min_max_scaler = MinMaxScaler()
+min_max_scaler.fit(X)
+
+from sklearn.cluster import KMeans  
+kmeans_model = KMeans(n_clusters= 3, max_iter = 100)
+kmeans_model.fit(data_prp1)
+fit_label = kmeans_model.labels_
+center=kmeans_model.cluster_centers_
+Fs=pd.Series(fit_label,index=dx['CardNo']) 
+Fs
+# 0为校园卡消费次数较少的同学；1为校园卡消费次数较多，且消费金额较大的同学；2为1为校园卡消费次数较多，且消费金额较小的同学，经济状况较差
+
+DataFrame1 = pd.DataFrame({ 'money_sum':money_sum, 'money_count':money_count,'Fs':Fs})
+DataFrame1.to_csv('task3_X3.csv')

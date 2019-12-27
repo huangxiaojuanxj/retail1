@@ -1,0 +1,7 @@
+##数据合并
+data_mer = pd.merge(data2_normal_1,data1,left_on = 'CardNo',right_on = 'CardNo',how = 'inner')
+data_mer = data_mer.dropna(subset=['Date'])    #删除缺失值
+# data_mer.shape
+data_mer.to_csv('task1_X4.csv')
+
+#data_mer.isnull().sum()  检验连接表无缺失值

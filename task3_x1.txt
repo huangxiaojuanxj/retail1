@@ -1,0 +1,18 @@
+#查看消费类型的频次，有消费、存款、无卡销户、退款
+data_mer['CardNo'].groupby(data_mer['Type']).count()  
+
+# 提取学生消费数据
+data_mer_1 = data_mer.loc[data_mer['Type']=='消费']   
+#data_mer_1.shape
+
+# 人均消费
+data_mer_carno = data_mer_1.drop_duplicates(subset = 'CardNo')['CardNo'].count()    # 该月消费人数
+data_mer_money = data_mer_1['Money'].sum()           # 该月消费总金额
+data_mer_rjxf = data_mer_money/data_mer_carno         # 人均消费
+print('本月人均消费',round(data_mer_rjxf,2))
+
+# 本月人均刷卡频次
+data_mer_zpc = data_mer_1['CardNo'].count()
+data_mer_skpc = data_mer_zpc/data_mer_carno
+print('本月人均刷卡频次',round(data_mer_skpc,2))
+

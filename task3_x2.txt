@@ -1,0 +1,68 @@
+# 提取 专业信息
+Major_rs = data_mer_1['CardNo'].groupby(data_mer_1['Major']).count() 
+Major = Major_rs.index
+#Major
+
+# 各专业男女分布情况
+for i in Major:
+    df = data_mer_1.loc[data_mer_1['Major']==i]
+    print(i)
+    dk = df['CardNo'].groupby(df['Sex']).count()
+    print(dk)
+#  18建筑设计、18艺术设计 男女比例较为均匀，18市场营销、18连锁经营人数最多，代表性较高，所以选取这三个专业的学生进行研究
+
+# 18建筑设计 男女生 人均消费
+data_jzsj = data_mer_1.loc[data_mer_1['Major']=='18建筑设计']   # 提取数据
+data_jzsj_man = data_jzsj.loc[data_jzsj['Sex']=='男']
+data_jzsj_women = data_jzsj.loc[data_jzsj['Sex']=='女']
+y1 = round(data_jzsj_man['Money'].sum()/data_jzsj_man.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18建筑设计男生人均消费
+y2 = round(data_jzsj_women['Money'].sum()/data_jzsj_women.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18建筑设计女生人均消费
+#print(y1,y2)
+
+# 18艺术设计 男女生 人均消费
+data_yssj = data_mer_1.loc[data_mer_1['Major']=='18艺术设计']   # 提取数据
+data_yssj_man = data_yssj.loc[data_yssj['Sex']=='男']
+data_yssj_women = data_yssj.loc[data_yssj['Sex']=='女']
+h1 = round(data_yssj_man['Money'].sum()/data_yssj_man.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18艺术设计男生人均消费
+h2 = round(data_yssj_women['Money'].sum()/data_yssj_women.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18艺术设计女生人均消费
+#print(h1,h2)
+
+# 18市场营销 男女生 人均消费
+data_scyx = data_mer_1.loc[data_mer_1['Major']=='18市场营销']   # 提取数据
+data_scyx_man = data_scyx.loc[data_scyx['Sex']=='男']
+data_scyx_women = data_scyx.loc[data_scyx['Sex']=='女']
+f1 = round(data_scyx_man['Money'].sum()/data_scyx_man.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18市场营销男生人均消费
+f2 = round(data_scyx_women['Money'].sum()/data_scyx_women.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18市场营销女生人均消费
+#print(f1,f2)
+
+# 18连锁经营 男女生 人均消费
+data_lsjy = data_mer_1.loc[data_mer_1['Major']=='18连锁经营']   # 提取数据
+data_lsjy_man = data_lsjy.loc[data_lsjy['Sex']=='男']
+data_lsjy_women = data_lsjy.loc[data_lsjy['Sex']=='女']
+k1 = round(data_lsjy_man['Money'].sum()/data_lsjy_man.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18市场营销男生人均消费
+k2 = round(data_lsjy_women['Money'].sum()/data_lsjy_women.drop_duplicates(subset = 'CardNo')['CardNo'].count(),2)  #18市场营销女生人均消费
+#print(k1,k2)
+
+# 绘制专业间不同性别学生群体 人均消费 对比柱形图
+import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif']='SimHei'   # 显示中文
+plt.rcParams['axes.unicode_minus']=False  # 显示负号
+import numpy as np
+# 构建数据
+x_data = ['建筑设计', '艺术设计','市场营销','连锁经营']
+y_data = [y2, h2, f2, k2]
+y_data2 = [y1, h1, f1, k1]
+# 绘图
+plt.bar(x=x_data, height=y_data2, label='男生', color='steelblue', alpha=0.8)
+plt.bar(x=x_data, height=y_data, label='女生', color='indianred', alpha=0.8)
+# 设置标题
+plt.title("专业间不同性别学生群体 人均消费 对比柱形图")
+# 为两条坐标轴设置名称
+plt.xlabel("专业")
+plt.ylabel("人均消费")
+# 显示图例
+plt.legend()
+plt.savefig('task3_X1.png')
+plt.show()
+
+#  由图可以得出，各个专业中男生人均消费均高于女生人均消费
